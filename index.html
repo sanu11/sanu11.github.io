@@ -1,0 +1,668 @@
+<html>
+<head>
+
+
+   <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+
+  <!-- tabletop is used to get data from googlesheets -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/tabletop.js/1.5.1/tabletop.min.js'></script>
+
+  <!-- d3 library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.0.0/d3.min.js"></script>
+
+  <!-- Library for pie chart -->
+  <script src='javascript/d3pie.min.js'></script>
+
+  <!-- library for custom colors   -->
+ <!--  <script src="https://d3js.org/d3-color.v1.min.js"></script>
+  <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+  <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+ -->
+ <title>Australian Open</title>
+  <style type="text/css">
+
+  p {
+    font-size: 20px;
+    color: orangered;
+  }
+  body{
+    color:black;
+    padding-top: 65px;
+    font-family: "Comic sans MS",cursive,sans-serif;
+
+     }
+
+  svg, text{
+    font-family: "Comic sans MS",cursive,sans-serif;
+
+
+  }
+  .container {
+    float: left;
+  }
+
+  .bar {
+    fill-opacity: .9;
+    }
+
+/*  text{
+    font-size: 12px;
+    color: black;
+    }*/
+
+  .line-chart
+  {
+    border: 1px solid lightgray;
+  }
+
+  .tooltip{     
+   width: 100px;
+   height: 60px;
+   padding: 6px;
+   font: 12px "Comic sans MS",cursive,sans-serif;
+   opacity: 1;
+ }
+
+  .line {
+    fill: none;
+    stroke: #123456;
+    stroke-width: 5px;
+  }
+
+ .overlay {
+  fill: none;
+  pointer-events: all;
+  } 
+
+ .focus circle {
+  fill: #123456;
+  stroke: #123456;
+  stroke-width: 1px;
+}
+  
+  .hover-line {
+  stroke: #123456;
+  stroke-width: 2px;
+  stroke-dasharray: 3,3;
+}
+
+</style>
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#Introduction">Australian Open Statistics ( 2004 - 2014 )</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#linkedCharts">Linked Charts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pie">Pie Chart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#Summary">Summary</a>
+                    </li>
+
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+<!---- INTRO   ----------->
+<div class="w3-container" style="margin-top: 10px">
+<h5 style="text-align: left;display: inline-block;margin-left: 30px"><u>Name: Sanika Shah</u></h5>
+<h5 style="text-align: center;display: inline-block;margin-left: 320px"><u>Data Visualization</u></h5>
+<h5 style="text-align: right;display: inline-block;margin-left: 320px"><u>Date: 12th September</u></h5>
+</div>
+
+<!------ SVG---------->
+  <div id="linkedCharts">
+        
+
+          <h6 style="text-align: right;display: inline-block;margin-left: 30px;margin-top: 20px">Click on the bars to see total number of matches won by that country yearwise</h6><br><br>
+          <u><h5 style="margin-left: 25px;display:block;margin-bottom:30px">Total matches won by countries</h5></u>
+          <label style="margin-left: 500px;display:block;margin-top:20px; margin-bottom: -6.5em; z-index:10;position:relative" class="sort"><input id="checkbox" type="checkbox" /> Sort values</label>  
+     <br><br>
+    
+    <div class="w3-container" style="margin-top: 10px" >
+        <svg></svg>
+
+        <svg id ="svg2"></svg> 
+        <br><br> 
+        <div id="pie" style="margin-top:70px"></div>
+    </div>
+
+  </div>
+
+  <!------ SUMMARY --------->
+
+  <p id="wait" style="visibility: visible;margin-left: 20px"> Please wait. It'll take some time to load charts</p>
+  <div id="Summary" style="margin-left: 20px">
+  <h4><u>Summary</u></h4><br>
+  <u>Dataset: </u>The Australian Open dataset is stored as a shared googlesheet in my account.
+  I have used Tabletop library to get data from googlesheet.
+  <br><br>
+  <u>Linked Charts: </u> The first chart shows overview of total number of matches won by each countries from 2004 to 2014.
+  Bar graph is used to represent the information since the data is categorical.
+  Hovering over the bar  highlights the bar and the tooltip shows total matches (includes all rounds) won by that country.<br>
+  Clicking over the bar shows detailed view for that country which is number of matches won per year by that country.
+  This is represented using line chart since it shows the trend over years.
+  Hovering over the points displays total number of matches won by that country in that particular year.
+
+  <br><br>
+  <u>Insights:</u>  You can click on a bar which represents a country in chart 1 (bar graph) to get yearwise total matches won by that country in chart 2 (line chart).
+  <br><br>
+
+  <u>Interactions: </u>  Apart from overview->detail interaction between bar chart and line chart I have used sorting for bar graph which when checked, sorts the data based on number of matches in descending order and when unchecked, sorts data alphabetically by country's name in ascending order.
+  Also hovering over the charts shows corresponding values for every chart.
+  <br><br>
+  <u>Extra Chart:</u> I have added one more chart which is pie chart to show only the number of finals won by countries. I have used d3pie library which is built on d3.js to build attractive pie charts. I found it very convenient to build pie chart using d3pie. 
+  I feel pie chart is suitable here since comparison between countries to check number of finals won becomes easy. Also since the number of years is just 11, pie chart fits here properly. 
+  <br><br>
+  I think I deserve extra credit because of above mentioned interaction and an extra chart :)
+
+  </div>
+  
+  <script type='text/javascript'>   
+
+  var data;
+
+  document.getElementById("checkbox").checked=false;
+  //tabletop get data from googlesheet 
+  var sheetUrl = 'https://docs.google.com/spreadsheets/d/16FXc-x8sDa2pTaDD_6f60n2BHWfNsjG0EyEq-R5rpoM/edit?usp=sharing';
+
+  //simplesheet can be set to false for multiplesheets.
+  function init() {
+    Tabletop.init( { key: sheetUrl,
+     callback: showInfo,  
+     simpleSheet: true } )
+  }
+
+  //callback function , called after the data is loaded
+  function showInfo(data1, tabletop) {
+    data = data1;
+    //console.log(data[0]);  
+    renderBar1();
+    renderBar2("Spain");
+    renderPie();
+
+  }
+
+function renderBar1(){
+
+  /*------------- intialize variables -------------*/
+
+  var svgWidth = 600;
+  var svgHeight = 550;
+  var margin = {top: 20, right: 0, bottom: 140, left: 70};
+
+  var width = svgWidth - margin.left - margin.right;
+  var height = svgHeight - margin.top - margin.bottom;
+
+  var svg = d3.select('svg').attr('width',svgWidth).attr('height',svgHeight).append('g').attr('transform', '        translate(' + margin.left + ',' + margin.top + ')');
+
+  /*------------- make data ready -------------*/
+
+  //groups data by country1 and counts it.
+  //example: {"key": Spain , "value":186} is the count of total matchse won by ESP.
+  var winnerCount = d3.nest()
+                      .key(function(d) { return d.CountryName1; })
+                      .rollup(function(v) { return v.length; })
+                      .entries(data);
+
+
+  /*------------- define X and Y axis -------------*/
+
+  //country names for x axis.
+  var countries = winnerCount.map(function(d) {
+                      return d.key;
+                    });
+
+  //x axis - countries
+  var countryScale = d3.scaleBand()
+                      .domain(countries)
+                      .range([0, width])
+                      //padding between bars
+                      .paddingInner(0.3);
+
+  //y axis - count of matches won
+  var matchesScale = d3.scaleLinear()
+                  .domain([0, d3.max(winnerCount, function(d) { return d.value; })])
+                  .range([height, 0])
+                                      // use nice to round the domain values to nice numbers
+                    .nice();
+
+  var barWidth = countryScale.bandwidth();
+
+  var barHolder = svg.append('g')
+  .classed('bar-holder', true);
+
+  var xAxis  = d3.axisBottom(countryScale);
+  var yAxis  = d3.axisLeft(matchesScale);
+  //console.log(JSON.stringify(winnerCount));
+
+/* */
+ // svg.append("foreignObject")
+ //        .attr("width", 200)
+ //        .attr("height", 100)
+ //        .append("xhtml:body")
+ //        .attr("class","input")
+ //        .html("<label><input type=checkbox id=check />Sort values</label>")
+ //        .on("change", change);
+
+
+
+    /*------------- add bars to svg -------------*/
+
+
+  var tooltip = d3.select("body")
+                  .append("div")
+                  .style("position", "absolute")
+                  .style("z-index", "100")
+                  .style("visibility", "hidden")
+                  .style("background", "#FFFFFF")
+                  .text("a simple tooltip")
+                  .attr("class","tooltip");
+
+
+    //adds bar to svg
+  svg.selectAll("rect.bar")
+      .data(winnerCount,function(d){return d.value;})
+      .enter()
+      .append("rect")
+      .classed('bar', true)
+      // its determined using x axis scale.
+      .attr('x',function(d){return countryScale(d.key);})
+
+      // its determined using y axis scale.
+      .attr('y',function(d){return matchesScale(d.value);})
+
+      // height will be from y position till x axis which is height - y position.
+      .attr('height', function(d){return height - matchesScale(d.value);})
+      .attr('width',barWidth) 
+      .attr("fill","#123456")
+      //on hover change color and show tooltip
+      .on("mouseover", function(d){d3.select(this).attr("fill", "black");
+                                   tooltip.style("left", d3.event.pageX - 50 + "px")
+                                          .style("top", d3.event.pageY - 70 + "px")
+                                          .style("display", "inline-block")
+                                          .html((d.key) + " won "  + (d.value) + " matches ");
+                                   //tooltip.text("Matches won by " + d.key + " : "+ d.value);  
+                                  return tooltip.style("visibility", "visible");})
+      // .on("mousemove", function(){return tooltip.style("top", (d3.event.pageY-10)+"px").style("left",(d3.event.pageX+10)+"px");})
+      .on("mouseout", function(){d3.select(this).attr("fill","#123456"); return tooltip.style("visibility", "hidden");})
+      //on click render other chart
+      .on("click", function(d){renderBar2(d.key);});
+
+
+
+     /*------------- add axis and labels to svg -------------*/
+
+    // Add the x Axis and rotate its label to be clearly visible.
+  svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .attr("class", "x axis")
+      .call(xAxis)
+      .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("dx", "-1.5em")
+      .attr("dy", ".1em")
+      .attr("transform", function(d) {
+        return "rotate(-65)" 
+      });
+
+  var padding = -5;
+
+
+    // Add the y Axis
+  svg.append("g")
+    .attr("transform", "translate("+padding+",0)")
+    .attr("class", "y axis")
+    .call(yAxis)
+    
+
+
+
+  // now add titles to the axes
+  svg.append("text")
+      .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+      .attr("transform", "translate("+ (-40) +","+(height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+      .text("Total Matches won");
+
+      svg.append("text")
+      .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+      .attr("transform", "translate("+ (width/2) +","+(height+ 125)+")")  // centre below axis
+      .text("Countries");
+
+
+        /*-------------- Sort bars based on match count ---------------------*/
+     d3.select("input").on("change", change);
+
+      var sortTimeout = 2000;
+
+
+  function change() {
+      clearTimeout(sortTimeout);
+
+      var x0 = countryScale.domain(winnerCount.sort(this.checked
+                            ? function(a, b) { return b.value - a.value; }
+                            : function(a, b) { return d3.ascending(a.key, b.key); })
+                          .map(function(d) { return d.key; }))
+                          .copy();
+
+      svg.selectAll(".bar")
+         .sort(function(a, b) { return x0(a.key) - x0(b.key); });
+
+      var transition = svg.transition().duration(750),
+      delay = function(d, i) { return i * 50; };
+
+      transition.selectAll(".bar")
+                .delay(delay)
+                .attr("x", function(d) { return x0(d.key); });
+
+      transition.select(".x.axis")
+                .call(xAxis)
+                .selectAll("g")
+                .delay(delay);
+    }
+  }
+
+
+/*-------------- function to render 2nd graph-------------*/
+
+ function renderBar2(country){
+
+      /*------------- intialize variables -------------*/
+
+    console.log(country);
+    var svgWidth = 550;
+    var svgHeight = 550;
+    var margin = {top: 30, right: 10, bottom: 140, left: 60};
+
+    var width = svgWidth - margin.left - margin.right;
+    var height = svgHeight - margin.top - margin.bottom;
+
+    
+    //clear the svg so as to accomodate new chart.
+    var elm = d3.select("#svg2");
+    elm.selectAll("*").remove();
+
+    var svg = d3.select('#svg2').attr('width',svgWidth).attr('height',svgHeight).append("g").attr('transform',        'translate(' + margin.left + ',' + margin.top + ')');
+
+
+    /*------------- make data ready -------------*/
+
+   //groups data by Year
+    //count number of matches won for that particular country.
+    var winnerCount2 = d3.nest()
+                        .key(function(d) { return d.Year;})
+                        .rollup(function(v) { return d3.sum(v, function(e){ if (e.CountryName1==country) return 1;});})
+                        .entries(data);
+
+    for(var i=0;i<winnerCount2.length;i++){
+      winnerCount2[i].key = Number( winnerCount2[i].key );
+    }
+
+    //sort values by key.
+    //had to sort the values otherwise the line wasnt as expected.. 
+    winnerCount2.sort(function(a, b){
+                  var keyA = a.key;
+                  var keyB = b.key;
+                  // Compare the 2 dates
+                  if(keyA < keyB) return -1;
+                  if(keyA > keyB) return 1;
+                  return 0;
+                  });
+
+
+    console.log(winnerCount2);
+
+    /*------------- define X and Y axis and line-------------*/
+
+    
+    var years = winnerCount2.map(function(d) {
+                  return d.key;
+                });
+
+    for(var i=0;i<years.length;i++){
+      years[i] = Number(years[i]);
+    }
+    years.sort();
+   
+    //x axis - countries (so that countries dont start from x=0)
+   var yearScale = d3.scalePoint()
+                    .domain(years)
+                    .range([0, width])
+                    .padding(0.5);
+
+
+  //y axis - count of matches won
+   var matchesScale = d3.scaleLinear()
+                        .domain([0, d3.max(winnerCount2, function(d) { return d.value; })])
+                        .range([height, 0])
+                       // use nice to round the domain values to nice numbers
+                        .nice();
+
+  var xAxis  = d3.axisBottom(yearScale);
+  var yAxis  = d3.axisLeft(matchesScale);
+
+  // define the line
+  var valueline = d3.line()
+                    .x(function(d) { return yearScale(d.key); })
+                    .y(function(d) { return matchesScale(d.value); });
+
+
+
+/*--------------- Add title to svg ------------------------*/
+  svg.append("text")
+          .attr("x", (width / 2))             
+          .attr("y", 0 - (margin.top / 2))
+          .attr("text-anchor", "middle")  
+          .style("font-size", "16px") 
+          .style("text-decoration", "underline")  
+          .text(country);
+
+  /* --------- Add line to svg ------------*/
+
+  svg.append("g")
+    .append("path")
+    .datum(winnerCount2)
+    .attr("fill", "none")
+    .attr("stroke", "#123456")
+    .attr("stroke-linejoin", "round")
+    .attr("stroke-linecap", "round")
+    .attr("stroke-width", 1.5)
+    .attr("d", valueline) 
+    //.attr("dx","2em");
+
+
+
+  /*------------- add axis to svg -------------*/
+
+
+    // Add the X Axis
+    svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(yearScale))
+      .selectAll("text")  
+      .style("text-anchor", "end")
+      //shifts value from x and y axis.
+      .attr("dx", "1em")
+      .attr("dy", "1em");
+
+
+    // Add the Y Axis
+    svg.append("g")
+       .attr("class", "y axis")
+      //shifts value from x and y axis.
+      .attr("dx", "1em")
+      .attr("y", 6)
+      .attr("dy", "0.71em")
+      .call(d3.axisLeft(matchesScale));
+
+
+      // now add titles to the axes
+    svg.append("text")
+        .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+        .attr("transform", "translate("+ (-30) +","+(height/2)+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+        .text("Total Matches won");
+
+        svg.append("text")
+        .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+        .attr("transform", "translate("+ (width/2) +","+(height+50)+")")  // centre below axis
+        .text("Year");
+
+ 
+/*----------- highlighting value on hover--------------- */
+
+  var focus = svg.append("g")
+        .attr("class", "focus")
+        .style("display", "none");
+
+  focus.append("line")
+      .attr("class", "x-hover-line hover-line")
+      .attr("y1", 0)
+      .attr("y2", height);
+
+  focus.append("line")
+      .attr("class", "y-hover-line hover-line")
+      .attr("x1", width)
+      .attr("x2", width);
+
+  focus.append("circle")
+      .attr("r", 3);
+
+  focus.append("text")
+      .attr("x", 15)
+      .attr("dy", ".31em");
+
+  svg.append("rect")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+        .attr("class", "overlay")
+        .attr("width", width)
+        .attr("height", height)
+        .on("mouseover", function() { focus.style("display", null); })
+        .on("mouseout", function() { focus.style("display", "none"); })
+        .on("mousemove", mousemove);
+
+  var bisectDate = d3.bisector(function(d) { return d.key; }).left;
+
+    function mousemove() {
+   
+      var xPos = d3.mouse(this)[0];
+      var domain = yearScale.domain(); 
+      var range =  yearScale.range();
+      var rangePoints = d3.range(range[0], range[1], yearScale.step())
+      var year = domain[d3.bisect(rangePoints, xPos)];
+
+      var x0 = year,
+          i = bisectDate(winnerCount2, x0, 1),
+          d0 = winnerCount2[i - 1],
+          d1 = winnerCount2[i],
+          d = x0 - d0.key > d1.key - x0 ? d1 : d0;
+      console.log(x0,i,d0,d1,d);
+      focus.attr("transform", "translate(" + yearScale(d.key) + "," + matchesScale(d.value) + ")");
+      focus.select("text").text(function() { return d.value; });
+      focus.select(".x-hover-line").attr("y2", height - matchesScale(d.value));
+      focus.select(".y-hover-line").attr("x2", width + width);
+    }
+  
+}
+
+
+/*------Pie Chart to show countrywise wins --------*/
+function renderPie(){
+  document.getElementById("wait").style.visibility="hidden";
+    //calculate only final wins
+    var winnerCount = d3.nest()
+                          .key(function(d) { if(d.Round=="Final") return d.CountryName1; })
+                          .rollup(function(v) { return v.length; })
+                          .entries(data);
+
+    //removes undefined key
+    winnerCount = winnerCount.filter(function( element ) {
+       return element.key !== "undefined";
+    });
+
+    //not necessary - just done so as to assign color in increasing value of intensity for higher wins.
+    winnerCount.sort(function(a, b){
+                  var keyA = a.value;
+                  var keyB = b.value;
+                  // Compare the 2 dates
+                  if(keyA < keyB) return -1;
+                  if(keyA > keyB) return 1;
+                  return 0;
+                  });
+    
+    var winCountries=[];  
+
+    //create array of objects so as to add it to piechart.
+    for(var i=0;i<winnerCount.length;i++){
+      winCountries.push({
+            label: winnerCount[i].key,
+            value: winnerCount[i].value
+          });
+    }
+  
+  /* ----------- custom colors------------*/
+  var colSeg=[]
+  var length = winnerCount.length;
+  var scale = d3.scaleLinear().domain([0,length]).range([0.4,0.1]);
+
+  for(var i=0;i<length;i++){
+    colSeg.push(d3.hsl(210,0.65,scale(i)));
+  }
+
+  /*-----Pie Chart using d3pie -------*/
+   
+    var pie = new d3pie("pie", {
+      header: {
+        title: {
+          text: "Australian Open Winner Countries",
+          font: "Comic sans MS",
+        },
+        subtitle:{
+          text:"Number of final matches won by countries from 2004 to 2014",
+          font:"Comic sans MS"
+        }
+      },
+      data: {
+        content: winCountries,
+      },
+      labels:{
+      mainLabel:{
+          font:"Comic sans MS"
+        },
+        innerLabel:{
+          font:"Comic sans MS"
+        }
+      },
+      tooltips: {
+          enabled: true,
+          type: "placeholder",
+          string: "{label}, {value} matches, {percentage}%",
+          styles:{
+            font:"Comic sans MS"
+          }
+      },
+      misc: {
+            colors:{
+              segments:colSeg
+            }
+          }
+    }); 
+ }
+
+window.addEventListener('DOMContentLoaded', init);
+
+</script>
+</body>
+</html>
